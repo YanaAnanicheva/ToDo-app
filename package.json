@@ -24,6 +24,7 @@
     "lint:fix": "eslint ./src --fix",
     "format": "prettier --config .prettierrc --write src/**/*.js",
     "prettier": "prettier --write src/**/*.js",
+    "pre-commit": "lint-staged",
     "prepare": "husky install",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
@@ -46,13 +47,8 @@
       "last 1 safari version"
     ]
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "lint-staged": {
-    "*.(js|jsx)": [
+    "*.js": [
       "npm run lint",
       "npm run lint:fix",
       "npm run format"
@@ -72,7 +68,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.9.1",
     "husky": "^7.0.4",
-    "lint-staged": "^12.3.5",
+    "lint-staged": "^12.3.7",
     "prettier": "2.5.1"
   }
 }
