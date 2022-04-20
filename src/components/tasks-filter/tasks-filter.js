@@ -8,7 +8,7 @@ export default class TaskFilter extends Component {
 
     this.buttons = [
       { name: 'all', label: 'All' },
-      { name: 'acive', label: 'Active' },
+      { name: 'active', label: 'Active' },
       { name: 'completed', label: 'Completed' },
     ];
   }

@@ -3,24 +3,29 @@ import React, { Component } from 'react';
 import './task-list.css';
 import Task from '../task';
 
-export default class TaskList extends Component {
-  render() {
-    const { todos, onDeleted, onToggleDone, editItem } = this.props;
-    const elements = todos.map((item) => {
-      const { id, createdTime, ...itemProps } = item;
+const TaskList = ({ todos, onDeleted, onToggleDone, onToggleEdit, addEditedItem }) => {
+  const elements = todos.map((item, i) => {
+    const { createdTime, id } = item;
 
-      return (
-        <Task
-          key={id}
-          {...itemProps}
-          onDeleted={() => onDeleted(id)}
-          onToggleDone={() => onToggleDone(id)}
-          editItem={() => editItem(id)}
-          createdTime={createdTime}
-        />
-      );
-    });
+    return (
+      <Task
+        item={item}
+        key={id}
+        index={i}
+        onDeleted={() => onDeleted(id)}
+        onToggleDone={() => {
+          onToggleDone(id);
+        }}
+        onToggleEdit={() => {
+          onToggleEdit(id);
+        }}
+        addEditedItem={addEditedItem}
+        createdTime={createdTime}
+      />
+    );
+  });
 
-    return <ul className="todo-list">{elements}</ul>;
-  }
-}
+  return <ul className="todo-list">{elements}</ul>;
+};
+
+export default TaskList;

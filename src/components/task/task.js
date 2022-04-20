@@ -1,42 +1,29 @@
 import React, { Component } from 'react';
-import { format } from 'date-fns';
+import { formatDistanceToNow } from 'date-fns';
 import './task.css';
 
 export default class Task extends Component {
-  state = {
-    description: this.props.description,
+  createDateTask = Date.now();
+
+  handleChange = (event) => {
+    const { item, addEditedItem } = this.props;
+    const newItem = { ...item };
+
+    newItem.label = event.target.value;
+    newItem.editing = false;
+
+    addEditedItem(item.id, newItem);
   };
 
-  onLabelChange = (e) => {
-    this.setState({
-      description: e.target.value,
-    });
+  handleChangeKey = (event) => {
+    if (event.key === 'Enter') {
+      this.handleChange(event);
+    }
   };
-
-  onSubmit = (e) => {
-    e.preventDefault();
-    this.props.editItem(this.state.description);
-  };
-
-  componentDidMount() {
-    this.timerID = setInterval(() => this.tick(), 1000);
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.timerID);
-  }
-
-  tick() {
-    this.setState({
-      createdTime: `created ${format(new Date() - this.props.createdDate, 's')} seconds / ${format(
-        new Date() - this.props.createdDate,
-        'm'
-      )} minutes ago`,
-    });
-  }
 
   render() {
-    const { onDeleted, editItem, onToggleDone, completed, editing } = this.props;
+    const { onDeleted, onToggleEdit, onToggleDone, item } = this.props;
+    const { label, completed, editing } = item;
 
     let className = '';
     if (completed) {
@@ -51,15 +38,21 @@ export default class Task extends Component {
         <div className="view">
           <input className="toggle" type="checkbox" onChange={onToggleDone} />
           <label>
-            <span className="description">{this.props.description}</span>
-            <span className="created">{this.state.createdTime}</span>
+            <span className="description">{label} </span>
+            <span className="created">
+              created {formatDistanceToNow(this.createDateTask, { includeSeconds: true })} ago
+            </span>
           </label>
-          <button className="icon icon-edit" onClick={editItem} />
+          <button className="icon icon-edit" onClick={onToggleEdit} />
           <button className="icon icon-destroy" onClick={onDeleted} />
         </div>
-        <form onSubmit={this.onSubmit}>
-          <input type="text" className="edit" defaultValue={this.state.description} onChange={this.onLabelChange} />
-        </form>
+        <input
+          type="text"
+          className="edit"
+          defaultValue={label}
+          onBlur={this.handleChange}
+          onKeyPress={this.handleChangeKey}
+        />
       </li>
     );
   }

@@ -3,28 +3,29 @@ import React, { Component } from 'react';
 import './new-task-form.css';
 
 export default class NewTaskForm extends Component {
-  constructor() {
-    super();
-    this.state = {
+  state = {
+    label: '',
+  };
+
+  onLabelChange = (e) => {
+    this.setState({
+      label: e.target.value,
+    });
+  };
+
+  onSubmit = (e) => {
+    const { label } = this.state;
+
+    e.preventDefault();
+    this.props.addItem(label);
+    this.setState({
       label: '',
-    };
-
-    this.onLabelChange = (e) => {
-      this.setState({
-        label: e.target.value,
-      });
-    };
-
-    this.onSubmit = (e) => {
-      e.preventDefault();
-      this.props.addItem(this.state.label);
-      this.setState({
-        label: '',
-      });
-    };
-  }
+    });
+  };
 
   render() {
+    const { label } = this.state;
+
     return (
       <form className="item-add-form d-flex" onSubmit={this.onSubmit}>
         <input
@@ -32,7 +33,7 @@ export default class NewTaskForm extends Component {
           className="new-todo"
           onChange={this.onLabelChange}
           placeholder="What needs to be done?"
-          value={this.state.label}
+          value={label}
         />
       </form>
     );
